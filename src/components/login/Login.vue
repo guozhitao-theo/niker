@@ -21,13 +21,17 @@
           <router-link class="font-14 text-main" to="/forget">忘记密码？ 立即找回</router-link>
         </div>
       </div>
-      <el-button class="login-btn margin-t-25" @click="login('formlogin')" type="success">立即登录</el-button>
+      <el-button class="login-btn margin-t-25" :loading="loginLoading" @click="login('formlogin')" type="success">立即登录</el-button>
       <div class="font-white padding-t-25">白素贞商家系统后台</div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import {login} from '../commonjs/api'
+import {createNamespacedHelpers} from 'vuex'
+const { mapState: userState, mapActions: userActions} = createNamespacedHelpers('store/user')
 export default {
   data () {
     var checktel = (rule, value, callback) => {
@@ -43,6 +47,7 @@ export default {
     }
     return {
       labelPosition: 'left',
+      loginLoading: false,
       formlogin: {
         user_name: '',
         password: ''
@@ -53,7 +58,7 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 18, message: '长度在 6 到 8 个字符', trigger: 'blur' }
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
         ]
       }
     }
@@ -61,7 +66,44 @@ export default {
   methods: {
     login (formname) {
       this.$refs[formname].validate((valid) => {
-        console.log(valid)
+        if (valid) {
+          this.loginLoading = true
+          axios({
+            url: login + 'login',
+            method: 'post',
+            data: {
+              mobile: this.formlogin.user_name,
+              password: this.formlogin.password
+            }
+          }).then((res) => {
+            console.log(res.data)
+            res = res.data
+            if (res.status === 200) {
+              this.loginLoading = false
+              this.$message({
+                message: '登陆成功',
+                type: 'success',
+                showClose: 'ture',
+                duration: 3000,
+                onClose: () => {
+                  this.$router.push('/')
+                }
+              })
+              window.localStorage.setItem('token', res.data.token)
+              window.localStorage.setItem('infor', JSON.stringify(res.data.infor.result))
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error',
+                showClose: true,
+                duration: 3000,
+                onClose: () => {
+                  this.loginLoading = false
+                }
+              })
+            }
+          })
+        }
       })
     }
   }
