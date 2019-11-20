@@ -1,0 +1,54 @@
+@mainColor: #003465;
+@fromColor: #134676;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+li{
+  list-style: none;
+}
+a{
+  background: none;
+  text-decoration: none;
+  color: #fff;
+}
+a:hover{
+  cursor: pointer;
+}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+.clearfix:after{
+  content: '';
+  clear: both;
+  display: block;
+}
+.font-white {
+  color: #fff;
+}
+.text-main {
+  color: @mainColor;
+}
+.tetx-from {
+  color: @fromColor;
+}
+.remember{
+  appearance: none;
+  outline: none;
+  vertical-align: -2px;
+}
+.remember:after {
+  content: '';
+  display: inline-block;
+  width: 17px;
+  height: 15px;
+  background: url('./components/login/images/checkedbox.png') no-repeat;
+  background-position-y: 1px;
+}
+.remember:checked:after {
+  background-position-y: bottom;
+}

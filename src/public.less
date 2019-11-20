@@ -1,0 +1,61 @@
+@import './common.less';
+
+//字体大小 12px - 36px
+.font-size(18,6);
+.distance(60, 1);
+
+// 字体大小封装
+.font-size(@n, @i, @size: @i * 2) when (@i <= @n) {
+  .font-@{size} {
+    font-size: @i*2px;
+  }
+  .font-size(@n, (@i + 1))
+}
+// 边距封装
+.distance(@n, @i, @dis: @i + 1 ) when (@i <= @n) {
+  // 设置margin
+  .margin-@{dis} {
+    margin: @dis * 1px ;
+  }
+  .margin-l-@{dis} {
+    margin-left: @dis * 1px;
+  }
+  .margin-r-@{dis} {
+    margin-right: @dis * 1px;
+  }
+  .margin-t-@{dis} {
+    margin-top: @dis * 1px;
+  }
+  .margin-b-@{dis} {
+    margin-bottom: @dis * 1px;
+  }
+  .margin-lr-@{dis} {
+    margin: 0 @dis * 1px;
+  }
+  .margin-tb-@{dis} {
+    margin: @dis * 1px 0;
+  }
+  // 设置padding 
+  .padding-@{dis} {
+    padding: @dis * 1px ;
+  }
+  .padding-l-@{dis} {
+    padding-left: @dis * 1px;
+  }
+  .padding-r-@{dis} {
+    padding-right: @dis * 1px;
+  }
+  .padding-t-@{dis} {
+    padding-top: @dis * 1px;
+  }
+  .padding-b-@{dis} {
+    padding-bottom: @dis * 1px;
+  }
+  .padding-lr-@{dis} {
+    padding: 0 @dis * 1px;
+  }
+  .padding-tb-@{dis} {
+    padding: @dis * 1px 0;
+  }
+  .distance(@n, (@i + 1))
+}

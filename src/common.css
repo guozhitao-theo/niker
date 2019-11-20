@@ -1,0 +1,31 @@
+/* 公共的封装 */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+li{
+    list-style: none;
+}
+a{
+    background: none;
+    text-decoration: none;
+    color: #fff;
+}
+a:hover{
+    cursor: pointer;
+}
+.float-left{
+    float: left;
+}
+.float-right{
+    float: right;
+}
+.clearfix{
+    content: '';
+    clear: both;
+    display: block;
+}
+.font-white {
+    color: #fff;
+}
