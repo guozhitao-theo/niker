@@ -28,10 +28,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-import {login} from '../commonjs/api'
 import {createNamespacedHelpers} from 'vuex'
-const { mapState: userState, mapActions: userActions} = createNamespacedHelpers('store/user')
+import {loginrequest} from 'commonjs/requestAxios'
+const {mapMutations: userActions} = createNamespacedHelpers('user')
 export default {
   data () {
     var checktel = (rule, value, callback) => {
@@ -64,36 +63,49 @@ export default {
     }
   },
   methods: {
+    ...userActions(['createUserInfor']),
     login (formname) {
       this.$refs[formname].validate((valid) => {
         if (valid) {
           this.loginLoading = true
-          axios({
-            url: login + 'login',
-            method: 'post',
+          loginrequest({
+            url: 'login',
             data: {
               mobile: this.formlogin.user_name,
               password: this.formlogin.password
-            }
-          }).then((res) => {
-            console.log(res.data)
-            res = res.data
-            if (res.status === 200) {
-              this.loginLoading = false
+            },
+            success: (res) => {
+              if (res.status === 200) {
+                this.loginLoading = false
+                this.$message({
+                  message: '登陆成功',
+                  type: 'success',
+                  showClose: 'ture',
+                  duration: 3000,
+                  onClose: () => {
+                    this.$router.push('/')
+                  }
+                })
+                this.createUserInfor({
+                  userInfor: res.data.infor.result
+                })
+                window.localStorage.setItem('token', res.data.token)
+                window.localStorage.setItem('infor', JSON.stringify(res.data.infor.result))
+              } else {
+                this.$message({
+                  message: res.message,
+                  type: 'error',
+                  showClose: true,
+                  duration: 3000,
+                  onClose: () => {
+                    this.loginLoading = false
+                  }
+                })
+              }
+            },
+            error: (res) => {
               this.$message({
-                message: '登陆成功',
-                type: 'success',
-                showClose: 'ture',
-                duration: 3000,
-                onClose: () => {
-                  this.$router.push('/')
-                }
-              })
-              window.localStorage.setItem('token', res.data.token)
-              window.localStorage.setItem('infor', JSON.stringify(res.data.infor.result))
-            } else {
-              this.$message({
-                message: res.message,
+                message: '请重登',
                 type: 'error',
                 showClose: true,
                 duration: 3000,

@@ -1,4 +1,4 @@
-const login = 'http://192.168.97.212:3000/'
+const api = '/api/'
 export {
-  login
+  api
 }
