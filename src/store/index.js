@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import User from './user.js'
-console.log(User)
+
 Vue.use(Vuex)
 
 const store = {

@@ -10,7 +10,7 @@ module.exports = {
       }
     }).catch(function(err){
       if (err) {
-        return err
+        return false
       }
     })
     return(result)

@@ -27,7 +27,10 @@ export default new Router({
     },
     {
       path: '/forget',
-      component: Forget
+      components: {
+        default: Forget,
+        Header: Header
+      }
     }
   ]
 })

@@ -1,8 +1,10 @@
 let data = require('../controller/data')
 let jwt = require('jsonwebtoken')
 let md5 = require('md5')
+let verifyToken = require('../common/common')
 
 const login = async (req, res) => {
+	verifyToken.vrerifyToken(req, res)
 	let mobile = req.body.mobile || req.query.mobile
 	let password = req.body.password || req.query.password
 	// 生成token
