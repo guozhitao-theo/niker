@@ -18,7 +18,7 @@
           </label>
         </div>
         <div class="fr">
-          <router-link class="font-14 text-main" to="/forget">忘记密码？ 立即找回</router-link>
+          <router-link class="font-14 text-main" to="/">忘记密码？ 立即找回</router-link>
         </div>
       </div>
       <el-button class="login-btn margin-t-25" :loading="loginLoading" @click="login('formlogin')" type="success">立即登录</el-button>
@@ -83,7 +83,7 @@ export default {
                   showClose: 'ture',
                   duration: 3000,
                   onClose: () => {
-                    this.$router.push('/')
+                    this.$router.push('/setting')
                   }
                 })
                 this.createUserInfor({
@@ -122,7 +122,6 @@ export default {
 }
 </script>
 
-<style lang="less" scope>
-@import '../../public.less';
+<style lang="less" >
 @import './css/login.less';
 </style>

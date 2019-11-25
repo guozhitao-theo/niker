@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import {api} from './api'
+import Router from 'vue-router'
 
 // 请求拦截在请求发送之前做的事情
 axios.interceptors.request.use((config) => {
@@ -21,6 +22,7 @@ axios.interceptors.response.use((response) => {
     if (response.headers.token === 'fase') {
       console.log('别忘记这里页面跳转到登陆页面')
       alert('这是个提示：别忘记这里页面跳转到登陆页面')
+      Router.push('/login')
     }
   }
   return response

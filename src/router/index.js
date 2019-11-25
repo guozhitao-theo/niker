@@ -7,7 +7,8 @@ import Left from '@/components/common/Left.vue'
 import Index from '@/components/index/index.vue'
 // 引入登录页面
 import Login from '@/components/login/Login.vue'
-import Forget from '@/components/login/forget.vue'
+import Setting from '@/components/login/setting.vue'
+import changePassword from '@/components/login/changePassword.vue'
 
 Vue.use(Router)
 
@@ -26,11 +27,15 @@ export default new Router({
       component: Login
     },
     {
-      path: '/forget',
+      path: '/setting',
       components: {
-        default: Forget,
+        default: Setting,
         Header: Header
-      }
+      },
+      children: [{
+        path: '',
+        component: changePassword
+      }]
     }
   ]
 })
