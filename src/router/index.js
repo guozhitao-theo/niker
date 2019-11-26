@@ -9,6 +9,7 @@ import Index from '@/components/index/index.vue'
 import Login from '@/components/login/Login.vue'
 import Setting from '@/components/login/setting.vue'
 import changePassword from '@/components/login/changePassword.vue'
+import stepSecond from '@/components/login/stepSecond.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,10 @@ export default new Router({
       children: [{
         path: '',
         component: changePassword
+      },
+      {
+        path: 'stepStore',
+        component: stepSecond
       }]
     }
   ]

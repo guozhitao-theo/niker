@@ -3,18 +3,19 @@
     <div class="changePassword-tip text-left">
       <p>是否需要委托niker平台加密您的交易密码?</p>
       <p class="on">若未选择加密保存服务，请您务必认真保存，一旦丢失无法找回!</p>
-      <label class="isSave-switch"  @click="openProtocol = true">
-        <el-switch
-        v-model="isSave"
-        >
-        </el-switch>
-        <span onselectstart="return false" class="yes">是</span>
-        <span onselectstart="return false" class="no">否</span>
-      </label>
     </div>
     <div class="changePassword-container">
-      <el-form :gutter="20" ref="changePwdForm" :rules="rules" :model="changePwdForm" label-width="120px" >
-        <el-form-item label="输入新交易密码" prop="password">
+      <el-form class="text-left" :gutter="20" ref="changePwdForm"  :rules="rules" :model="changePwdForm" label-width="120px" >
+        <label class="isSave-switch margin-l-49" >
+          <el-switch
+          v-model="changePwdForm.switch"
+          @change="changeIsSave"
+          >
+          </el-switch>
+          <span onselectstart="return false" class="yes">是</span>
+          <span onselectstart="return false" class="no">否</span>
+        </label>
+        <el-form-item class="margin-t-15" label="输入新交易密码" prop="password">
           <el-input type="password" v-model="changePwdForm.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认新交易密码" prop="ackPassword">
@@ -25,11 +26,11 @@
             <el-input  type="text" v-model="changePwdForm.valiCode" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="6" :offset="3" >
-             <el-button type="primary">获取验证码</el-button>
+             <el-button @click="getvaliCode" :loading="false" type="primary">获取验证码</el-button>
           </el-col>
         </el-form-item>
       </el-form>
-      <el-button type="primary" class="changePwd-btn">确认提交</el-button>
+      <el-button type="primary" :loading='submitLoding' class="changePwd-btn" @click="changePwd('changePwdForm')">确认提交</el-button>
     </div>
     <el-dialog
       custom-class="openProtocol"
@@ -150,6 +151,9 @@
 </template>
 
 <script>
+import {getValiCode, submitChangePwd} from 'commonjs/requestAxios'
+import {createNamespacedHelpers} from 'vuex'
+const {mapMutations: stepMutations} = createNamespacedHelpers('stepStatus')
 export default {
   data () {
     var validatePassword = (rule, value, callback) => {
@@ -172,32 +176,95 @@ export default {
     }
     return {
       changePwdForm: {
-        password: '',
-        ackPassword: '',
-        valiCode: ''
+        switch: 'false',
+        isSave: 0,
+        password: '111111',
+        ackPassword: '111111',
+        valiCode: '1',
+        valiCodeStore: '1'
       },
       rules: {
-        password: [{
-          validator: validatePassword, trigger: 'blur'
-        }],
-        ackPassword: [{
-          validator: validateAckPassword, trigger: 'blur'
-        }],
+        password: [
+          {validator: validatePassword, trigger: 'blur'},
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+        ],
+        ackPassword: [
+          {validator: validateAckPassword, trigger: 'blur'},
+          { min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+        ],
         valiCode: [{
           required: true, message: '请输入验证码', trigger: 'blur'
         }]
       },
-      isSave: 0,
+      loading: false,
+      submitLoding: false,
       openProtocol: false
     }
   },
   methods: {
+    ...stepMutations(['changeStep']),
+    changeIsSave (isSave) {
+      if (isSave) {
+        this.changePwdForm.isSave = 1
+        this.openProtocol = true
+      } else {
+        this.changePwdForm.isSave = 0
+      }
+    },
     handleClose (done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
+      this.changePwdForm.switch = false
+      done()
+    },
+    getvaliCode () {
+      this.loading = true
+      getValiCode({
+        url: 'getValiCode',
+        data: {
+          valiCode: this.changePwdForm.valiCode
+        },
+        success: (res) => {
+          if (res.status === 200) {
+            this.changePwdForm.valiCodeStore = res.data
+          } else {
+            this.$message({
+              message: '获取验证码错误，请重新获取',
+              type: 'warning',
+              duration: '1000'
+            })
+          }
+          this.loading = false
+        }
+      })
+    },
+    changePwd (formname) {
+      this.submitLoding = true
+      this.$refs[formname].validate((valid) => {
+        if (valid) {
+          console.log('这是用来测试的')
+          this.changeStep(2)
+          this.$router.push('/setting/stepStore')
+          if (this.changePwdForm.valiCode === this.changePwdForm.valiCodeStore) {
+            submitChangePwd({
+              url: 'subchangePwd',
+              data: {
+                isSave: this.changePwdForm.isSave,
+                password: this.changePwdForm.password,
+                ackPassword: this.changePwdForm.ackPassword
+              },
+              success: (res) => {
+                this.changeStep(2)
+                this.$router.push('/setting/stepStore')
+              }
+            })
+          } else {
+            this.$message({
+              message: '验证码不正确，请重新获取',
+              type: 'warning'
+            })
+          }
+        }
+        this.submitLoding = false
+      })
     }
   }
 }

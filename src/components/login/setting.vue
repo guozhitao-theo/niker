@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="step-bar text-center padding-t-90">
-      <el-steps :active="active" :align-center="true" space="350px"  finish-status="success">
-        <el-step title="设置交易密码"></el-step>
-        <el-step title="选择功能模块"></el-step>
-        <el-step title="菜单配置"></el-step>
+      <el-steps :active="step" :align-center="true" space="350px"  finish-status="success">
+        <el-step class="first-step" title="设置交易密码"></el-step>
+        <el-step class="second-step" title="选择功能模块"></el-step>
+        <el-step class="third-step" title="菜单配置"></el-step>
       </el-steps>
     </div>
     <div><router-view></router-view></div>
@@ -15,7 +15,11 @@
 export default {
   data () {
     return {
-      active: 1
+    }
+  },
+  computed: {
+    step () {
+      return this.$store.state.stepStatus.stepBar
     }
   },
   methods: {

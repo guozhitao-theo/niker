@@ -1,7 +1,8 @@
+// 用户数据存储
 const user = {
   namespaced: true,
   state: {
-    userInfor: '565'
+    userInfor: ''
   },
   mutations: {
     createUserInfor (state, data) {
