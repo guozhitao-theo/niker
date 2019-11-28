@@ -10,6 +10,7 @@ import Login from '@/components/login/Login.vue'
 import Setting from '@/components/login/setting.vue'
 import changePassword from '@/components/login/changePassword.vue'
 import stepSecond from '@/components/login/stepSecond.vue'
+import customize from '@/components/login/customize.vue'
 
 Vue.use(Router)
 
@@ -39,7 +40,14 @@ export default new Router({
       },
       {
         path: 'stepStore',
-        component: stepSecond
+        component: stepSecond,
+        meta: {
+          keepAlive: 'true'
+        }
+      },
+      {
+        path: 'customize',
+        component: customize
       }]
     }
   ]

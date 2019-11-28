@@ -30,7 +30,7 @@
 <script>
 import {createNamespacedHelpers} from 'vuex'
 import {loginrequest} from 'commonjs/requestAxios'
-const {mapMutations: userActions} = createNamespacedHelpers('user')
+const {mapMutations: userMutations} = createNamespacedHelpers('user')
 export default {
   data () {
     var checktel = (rule, value, callback) => {
@@ -63,7 +63,7 @@ export default {
     }
   },
   methods: {
-    ...userActions(['createUserInfor']),
+    ...userMutations(['createUserInfor']),
     login (formname) {
       this.$refs[formname].validate((valid) => {
         if (valid) {

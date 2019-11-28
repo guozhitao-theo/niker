@@ -7,7 +7,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import '../theme/index.css'
 import {request, get, post} from 'commonjs/axios'
-
+console.log(ElementUI)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$request = request

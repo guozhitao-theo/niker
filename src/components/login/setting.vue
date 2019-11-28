@@ -1,13 +1,18 @@
 <template>
   <div>
-    <div class="step-bar text-center padding-t-90">
+    <div class="step-bar text-center padding-t-50">
       <el-steps :active="step" :align-center="true" space="350px"  finish-status="success">
         <el-step class="first-step" title="设置交易密码"></el-step>
         <el-step class="second-step" title="选择功能模块"></el-step>
         <el-step class="third-step" title="菜单配置"></el-step>
       </el-steps>
     </div>
-    <div><router-view></router-view></div>
+    <div>
+      <!-- <keep-alive>
+          <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive> -->
+      <router-view ></router-view>
+    </div>
   </div>
 </template>
 
@@ -27,6 +32,10 @@ export default {
       if (this.active++ > 2) this.active = 0
     }
   }
+  // beforeRouteLeave (to, from, next) {
+  //   from.meta.keepAlive = false
+  //   next()
+  // }
 }
 </script>
 
