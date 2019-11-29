@@ -8,8 +8,13 @@
 
 <script >
 import './public.less'
+// import Header from '@/components/common/Header.vue'
+// import Left from '@/components/common/Left.vue'
 export default {
   name: 'App'
+  // component: {
+  //   Left
+  // }
 }
 </script>
 

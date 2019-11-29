@@ -13,64 +13,26 @@
           background-color="#134676"
           text-color="#fff"
           active-text-color="#fff">
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-s-home"></i>
-              <span>导航一</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-user"></i>
-            <span slot="title">导航二</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-s-cooperation"></i>
-            <span slot="title">导航四</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-loading"></i>
-            <span slot="title">导航6</span>
-          </el-menu-item>
-          <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-s-shop"></i>
-              <span>导航5</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="5-1">选项1</el-menu-item>
-              <el-menu-item index="5-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="5-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="5-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="5-4-1">选项1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
+            <el-menu-item :key="index" v-for="(item, index) in chooseModuleNav" index= item.id>
+              <i :class="item.icon"></i>
+              <router-link :to="item.path">{{item.showname}}</router-link>
+            </el-menu-item>
         </el-menu>
     </aside>
 </template>
 
 <script>
+import {createNamespacedHelpers} from 'vuex'
+const {mapState: chooseState} = createNamespacedHelpers('module')
 export default {
   data () {
     return {
-      avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+      avatarUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+      chooseModuleNav: {}
     }
+  },
+  computed: {
+    ...chooseState(['chooseModule'])
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -78,6 +40,19 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    }
+  },
+  beforeMount () {
+    let customizeModule = JSON.parse(window.localStorage.getItem('customizeModule'))
+    let universalModule = JSON.parse(window.localStorage.getItem('universalModule'))
+    if (customizeModule) {
+      if (Object.keys(customizeModule).length > 0) {
+        Object.assign(this.chooseModuleNav, customizeModule)
+      } else {
+        Object.assign(this.chooseModuleNav, universalModule)
+      }
+    } else {
+      Object.assign(this.chooseModuleNav, universalModule)
     }
   }
 }

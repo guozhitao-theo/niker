@@ -24,7 +24,7 @@ export default {
     ...stepMutations(['changeStep']),
     applyModule () {
       let chooseModule = JSON.parse(window.localStorage.getItem('chooseModule'))
-      if (!chooseModule) {
+      if (Object.keys(chooseModule).length <= 0) {
         this.$message({
           message: '请选择自定义功能模块',
           type: 'error',

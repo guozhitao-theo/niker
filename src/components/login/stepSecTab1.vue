@@ -13,13 +13,20 @@
 </template>
 
 <script>
+import {createNamespacedHelpers} from 'vuex'
 import Module from './module.vue'
+const {mapState: universalState} = createNamespacedHelpers('module')
 export default {
   components: {
     module: Module
   },
+  computed: {
+    ...universalState(['moduleData'])
+  },
   methods: {
     applymodule () {
+      window.localStorage.removeItem('customizeModule')
+      window.localStorage.setItem('universalModule', JSON.stringify(this.moduleData))
       this.$router.push('/')
     }
   }

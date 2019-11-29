@@ -47,14 +47,16 @@
     </div>
     <div class="text-center">
       <el-button @click="goback" type="info">返回</el-button>
-      <el-button type="primary">提交修改</el-button>
+      <el-button @click="submiteUpdate" type="primary">提交修改</el-button>
     </div>
+    <input type="hidden" id="refreshed" value="no">
   </div>
 </template>
 
 <script>
 import {createNamespacedHelpers} from 'vuex'
 const {mapState: moduleState, mapMutations: moduleMutations} = createNamespacedHelpers('module')
+
 export default {
   data () {
     return {
@@ -82,8 +84,6 @@ export default {
     saveUpdateModuleDialog () {
       this.updateModuleDialog = false
       this.$set(this.chooseModule, this.dialogModule.id, this.dialogModule)
-      window.localStorage.removeItem('chooseModule')
-      window.localStorage.setItem('customizeModule', JSON.stringify(this.chooseModule))
     },
     goback () {
       this.changeTabIndex(2)
@@ -94,10 +94,27 @@ export default {
       this.updateModuleDialog = false
       this.$delete(this.chooseModule, id)
       window.localStorage.setItem('chooseModule', JSON.stringify(this.chooseModule))
+    },
+    submiteUpdate () {
+      window.localStorage.removeItem('chooseModule')
+      window.localStorage.setItem('customizeModule', JSON.stringify(this.chooseModule))
+      this.$router.push('/')
     }
   },
   computed: {
     ...moduleState(['chooseModule'])
+  },
+  mounted () {
+    onload = function () {
+      var refreshedId = document.getElementById('refreshed')
+      console.log(refreshedId)
+      if (refreshedId.value === 'no') {
+        refreshedId.value = 'yes'
+      } else {
+        refreshedId.value = 'no'
+        location.reload()
+      }
+    }
   }
 }
 </script>

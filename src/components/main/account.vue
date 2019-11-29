@@ -1,5 +1,5 @@
 <template>
-    <main class="index">这是内容</main>
+  <div>这是账户管理</div>
 </template>
 
 <script>

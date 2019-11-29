@@ -5,12 +5,14 @@
       <div class="function-descript">{{item.descript}}</div>
       <span class="checked-function"><i onselectstart="return false">√</i></span>
     </li>
+    <input type="hidden" id="refreshed" value="no">
   </ul>
 </template>
 
 <script>
 import {createNamespacedHelpers} from 'vuex'
 const {mapState: moduleState, mapMutations: moduleMutations} = createNamespacedHelpers('module')
+
 export default {
   data () {
     return {
@@ -20,7 +22,6 @@ export default {
   methods: {
     ...moduleMutations(['addChooseModule', 'deletechooseModule']),
     choosed (index) {
-      console.log(index)
       if (Number(this.tabIndex) === 2) {
         if (this.chooseModule[index + 1]) {
           this.deletechooseModule(this.moduleData[index])
@@ -52,10 +53,24 @@ export default {
     nowChooseModule: function (val) {
     }
   },
-  mounted () {
+  beforeMount () {
     let backModule = JSON.parse(window.localStorage.getItem('chooseModule'))
     if (backModule) {
-      this.nowChooseModule = backModule
+      if (Object.keys(backModule).length > 0) {
+        Object.assign(this.nowChooseModule, backModule)
+      }
+    }
+  },
+  mounted () {
+    onload = function () {
+      var refreshedId = document.getElementById('refreshed')
+      console.log(refreshedId)
+      if (refreshedId.value === 'no') {
+        refreshedId.value = 'yes'
+      } else {
+        refreshedId.value = 'no'
+        location.reload()
+      }
     }
   }
 }

@@ -6,6 +6,7 @@
       <el-tab-pane label="通用功能"><stepSecTab1></stepSecTab1></el-tab-pane>
       <el-tab-pane label="自定义功能模块"><stepSecTab2></stepSecTab2></el-tab-pane>
     </el-tabs>
+    <input type="hidden" id="refreshed" value="no">
   </div>
 </template>
 
@@ -34,10 +35,22 @@ export default {
   mounted () {
     let backModule = JSON.parse(window.localStorage.getItem('chooseModule'))
     if (backModule) {
-      this.activeTab = '2'
-      this.changeTabIndex(2)
-    } else {
-      this.activeTab = '1'
+      if (Object.keys(backModule).length > 0) {
+        this.activeTab = '2'
+        this.changeTabIndex(2)
+      } else {
+        this.activeTab = '1'
+        this.changeTabIndex(1)
+      }
+    }
+    onload = function () {
+      var refreshedId = document.getElementById('refreshed')
+      if (refreshedId.value === 'no') {
+        refreshedId.value = 'yes'
+      } else {
+        refreshedId.value = 'no'
+        location.reload()
+      }
     }
   }
 }
